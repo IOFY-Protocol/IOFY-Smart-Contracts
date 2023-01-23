@@ -37,6 +37,7 @@ struct User {
     Order[] orders;
 }
 
+error INSUFFICIENT_CONTRACT_BALANCE();
 error INSUFFICIENT_BALANCE();
 error ZERO_ADDRESS();
 error ZERO_COST();
@@ -118,26 +119,26 @@ contract Iofy is Ownable {
         _setFee(fee);
     }
 
-    function takeFee(address recipient, uint256 fee) external onlyOwner {
+    function takeFee(address recipient, uint256 amount) external onlyOwner {
         uint256 avl = _availableFees;
-        if (avl < fee) revert INSUFFICIENT_BALANCE();
+        if (avl < amount) revert INSUFFICIENT_BALANCE();
         unchecked {
-            _availableFees -= fee;
+            _availableFees -= amount;
         }
-        _handleTransfer(recipient, fee);
-        emit TakeFee(msg.sender, recipient, fee);
+        _handleTransfer(recipient, amount);
+        emit TakeFee(msg.sender, recipient, amount);
     }
 
     // ==================== FOR IoT DEVICE OWNERS ==================== //
 
     function createIoTDevice(string memory cid, uint256 costPerHour)
         external
-        returns (uint256)
+        returns (uint256 id)
     {
         if (costPerHour == 0) revert ZERO_COST();
 
         _ioTDeviceId.increment();
-        uint256 id = _ioTDeviceId.current();
+        id = _ioTDeviceId.current();
 
         IoTDevice memory iot = IoTDevice(
             id,
@@ -153,8 +154,6 @@ contract Iofy is Ownable {
         _ioTDeviceOwners[msg.sender].ioTDeviceIds.push(id);
 
         emit CreateIotDevice(msg.sender, id, costPerHour, cid);
-
-        return id;
     }
 
     function modifyIoTDevice(
@@ -253,23 +252,23 @@ contract Iofy is Ownable {
     // ==================== READ METHODS ==================== //
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++ //
 
-    function getLastestIoTDeviceId() external view returns (uint256) {
+    function getLastestIoTDeviceId() external view returns (uint256 id) {
         return _ioTDeviceId.current();
     }
 
-    function getLastestOrderId() external view returns (uint256) {
+    function getLastestOrderId() external view returns (uint256 id) {
         return _orderID.current();
     }
 
-    function getFee() external view returns (uint256) {
+    function getFee() external view returns (uint256 fee) {
         return _fee;
     }
 
-    function getAvailableFees() external view returns (uint256) {
+    function getAvailableFees() external view returns (uint256 available) {
         return _availableFees;
     }
 
-    function getTotalRaisedInDeals() external view returns (uint256) {
+    function getTotalRaisedInDeals() external view returns (uint256 total) {
         return _totalraisedInDeals;
     }
 
@@ -313,7 +312,7 @@ contract Iofy is Ownable {
     function _handleTransfer(address recipient, uint256 amount) private {
         if (recipient == address(0)) revert ZERO_ADDRESS();
         uint256 bal = token.balanceOf(address(this));
-        if (bal < amount) revert INSUFFICIENT_BALANCE();
+        if (bal < amount) revert INSUFFICIENT_CONTRACT_BALANCE();
         token.safeTransfer(recipient, amount);
     }
 }

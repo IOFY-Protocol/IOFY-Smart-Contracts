@@ -51,7 +51,7 @@ where,
 | token  | the smart contract address of the ERC20 standard token to be used in the contract for transactions.                     |
 | fee    | the fee value (integer) to be set. When the value is set to **100**, it means that the contract will charge **1%** fee. |
 
-The address that deploys the the smart contract is automatically set to be the _owner()_ address. This is also modifyable in the contract. See [Openzeppelin] (https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable.sol).
+The address that deploys the the smart contract is automatically set to be the _owner()_ address. This is also modifyable in the contract. See [Openzeppelin](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable.sol).
 
 ### Read Methods
 
@@ -230,7 +230,7 @@ where,
 **NOTE**: This method will fail if:
 
 - it is executed by a non admin wallet.
-- _recipient_ is a [ZERO] (https://ethereum.stackexchange.com/questions/13523/what-is-the-zero-account-as-described-by-the-solidity-docs) address.
+- _recipient_ is a [ZERO](https://ethereum.stackexchange.com/questions/13523/what-is-the-zero-account-as-described-by-the-solidity-docs) address.
 - _fee_ is greater than what is available. See **getAvailableFees()**.
 
 - - **Lender Methods**
@@ -343,3 +343,15 @@ where,
 | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | spender | the smart contract address of IOFY marketplace.                                                                                                                                                                                                                                                                                                                                           |
 | amount  | the total supply of the token. You can get this by querying **totalSupply** in the token contract. We want to approve the total supply so that this user (the executor) will not need to make the **approve** call again even when he wants to pay to rent future devices. We do this to reduce the number of times the users will have to make write transactions that require gas fees. |
+
+### Mock Token Address:
+
+Ethereum address: 0x8AD10a05189cAC762Fc74b7b3F3eFFb1BEFb8FA9
+
+FVM address: t410frliqubiytswhml6hjn5t6px7wg7pxd5je6osqgy
+
+### Iofy Contract Address:
+
+Ethereum address: 0xc150c9Cf5e6CBC9Ec4F28b2Dbf750c04288bAC0d
+
+FVM address: t410fyfimtt26ns6j5rhsrmw365imaquixlan4suf2aa

@@ -88,16 +88,6 @@ where,
 | total  | the total amount (integer) raised in deals within the contract from all the deals |
 
 ```
-function getLastestIoTDeviceId() external view returns (uint256 id);
-```
-
-where,
-
-| Syntax   | description                                                                                        |
-| -------- | -------------------------------------------------------------------------------------------------- |
-| latestId | the value (integer) of the ID assigned to the lastly created **IoT device** in the smart contract. |
-
-```
 function getLastestOrderId() external view returns (uint256 id);
 ```
 
@@ -238,7 +228,7 @@ where,
 The lender is one who owns an IoT device and lists it inthe smart contract for renting
 
 ```
-function createIoTDevice(string memory cid, uint256 costPerHour) external returns (uint256 id)
+function createIoTDevice(string memory cid, uint256 iotDeviceId, uint256 costPerHour) external;
 ```
 
 where,
@@ -247,7 +237,7 @@ where,
 | ----------- | -------------------------------------------------------------------------- |
 | cid         | the hash string of the IoT device (From IPFS, Orbit-DB).                   |
 | costPerHour | the hourly cost of using the IoT device in USD of the IoT device to query. |
-| id          | the id assigend to this newly created IoT device after creation.           |
+| iotDeviceId | the id of the newly created iot device.                                    |
 
 **NOTE**: This method will fail if:
 
@@ -352,6 +342,6 @@ FVM address: t410frliqubiytswhml6hjn5t6px7wg7pxd5je6osqgy
 
 ### Iofy Contract Address:
 
-Ethereum address: 0xc150c9Cf5e6CBC9Ec4F28b2Dbf750c04288bAC0d
+Ethereum address: 0x954630ac0260B7BE506bD3D42517Ce7c21DDdb29
 
-FVM address: t410fyfimtt26ns6j5rhsrmw365imaquixlan4suf2aa
+FVM address: t410fsvddblacmc334udl2pkckf6opqq53wzjkfxvvma

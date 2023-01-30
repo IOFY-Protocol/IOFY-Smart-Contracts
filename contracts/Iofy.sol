@@ -44,6 +44,7 @@ error ZERO_COST();
 error FAILED_TRANSFER();
 error UNAUTHORIZED();
 error INACTIVE_DEVICE();
+error ID_DUPLICATED();
 
 contract Iofy is Ownable {
     using SafeERC20 for IERC20;
@@ -51,7 +52,6 @@ contract Iofy is Ownable {
 
     // State Variables
     IERC20 public token;
-    Counters.Counter public _ioTDeviceId;
     Counters.Counter public _orderID;
     uint256 private _fee; // 100 = 1%
     uint256 private _totalraisedInDeals;
@@ -103,12 +103,6 @@ contract Iofy is Ownable {
         _setFee(fee);
     }
 
-    modifier onlyAuthorized(uint256 iotDeviceId) {
-        IoTDevice memory iot = _ioTDeviceIdToIoTDevice[iotDeviceId];
-        if (msg.sender != iot.owner) revert UNAUTHORIZED();
-        _;
-    }
-
     // +++++++++++++++++++++++++++++++++++++++++++++++++++++++ //
     // ==================== WRITE METHODS ==================== //
     // +++++++++++++++++++++++++++++++++++++++++++++++++++++++ //
@@ -131,17 +125,18 @@ contract Iofy is Ownable {
 
     // ==================== FOR IoT DEVICE OWNERS ==================== //
 
-    function createIoTDevice(string memory cid, uint256 costPerHour)
-        external
-        returns (uint256 id)
-    {
+    function createIoTDevice(
+        string memory cid,
+        uint256 iotDeviceId,
+        uint256 costPerHour
+    ) external {
+        IoTDevice memory iot_ = _ioTDeviceIdToIoTDevice[iotDeviceId];
+        if (address(0) != iot_.owner) revert ID_DUPLICATED();
+
         if (costPerHour == 0) revert ZERO_COST();
 
-        _ioTDeviceId.increment();
-        id = _ioTDeviceId.current();
-
         IoTDevice memory iot = IoTDevice(
-            id,
+            iotDeviceId,
             costPerHour,
             0,
             0,
@@ -150,17 +145,20 @@ contract Iofy is Ownable {
             true
         );
 
-        _ioTDeviceIdToIoTDevice[id] = iot;
-        _ioTDeviceOwners[msg.sender].ioTDeviceIds.push(id);
+        _ioTDeviceIdToIoTDevice[iotDeviceId] = iot;
+        _ioTDeviceOwners[msg.sender].ioTDeviceIds.push(iotDeviceId);
 
-        emit CreateIotDevice(msg.sender, id, costPerHour, cid);
+        emit CreateIotDevice(msg.sender, iotDeviceId, costPerHour, cid);
     }
 
     function modifyIoTDevice(
         uint256 iotDeviceId,
         uint256 costPerHour,
         bool isActive
-    ) external onlyAuthorized(iotDeviceId) {
+    ) external {
+        IoTDevice memory iot_ = _ioTDeviceIdToIoTDevice[iotDeviceId];
+        if (msg.sender != iot_.owner) revert UNAUTHORIZED();
+
         if (costPerHour == 0) revert ZERO_COST();
 
         IoTDevice storage iot = _ioTDeviceIdToIoTDevice[iotDeviceId];
@@ -251,10 +249,6 @@ contract Iofy is Ownable {
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++ //
     // ==================== READ METHODS ==================== //
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++ //
-
-    function getLastestIoTDeviceId() external view returns (uint256 id) {
-        return _ioTDeviceId.current();
-    }
 
     function getLastestOrderId() external view returns (uint256 id) {
         return _orderID.current();

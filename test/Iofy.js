@@ -32,7 +32,6 @@ describe("Iofy", () => {
   });
 
   it("Should set the right values on deployment", async () => {
-    expect(await iofy.getLastestIoTDeviceId()).to.equal(0);
     expect(await iofy.getLastestOrderId()).to.equal(0);
     expect(await iofy.getFee()).to.equal(100);
   });
@@ -47,24 +46,22 @@ describe("Iofy", () => {
         "anotherNewMockCIDToCarryOutThisTestTheFVMSpaceWarpHackathon";
 
       // Try connecting with ZERO hourly price
-      await expect(iofy.connect(creator1).createIoTDevice(cid1a, 0)).to
+      await expect(iofy.connect(creator1).createIoTDevice(cid1a, 1, 0)).to
         .reverted;
 
       // creator1 creates
-      await iofy.connect(creator1).createIoTDevice(cid1a, pricePerHour);
-      expect(await iofy.getLastestIoTDeviceId()).to.equal(1);
+      await iofy.connect(creator1).createIoTDevice(cid1a, 1, pricePerHour);
+      await expect(iofy.connect(creator1).createIoTDevice(cid1a, 1, 0)).to
+        .reverted;
 
       // creator2 creates
-      await iofy.connect(creator2).createIoTDevice(cid2a, pricePerHour);
-      expect(await iofy.getLastestIoTDeviceId()).to.equal(2);
+      await iofy.connect(creator2).createIoTDevice(cid2a, 2, pricePerHour);
 
       // creator1 creates
-      await iofy.connect(creator1).createIoTDevice(cid1b, pricePerHour);
-      expect(await iofy.getLastestIoTDeviceId()).to.equal(3);
+      await iofy.connect(creator1).createIoTDevice(cid1b, 3, pricePerHour);
 
       // creator2 creates
-      await iofy.connect(creator2).createIoTDevice(cid2b, pricePerHour);
-      expect(await iofy.getLastestIoTDeviceId()).to.equal(4);
+      await iofy.connect(creator2).createIoTDevice(cid2b, 4, pricePerHour);
 
       // Query read method
       let info = await iofy.getIoTOwnerInfo(creator1.address);

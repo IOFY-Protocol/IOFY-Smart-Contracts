@@ -56,6 +56,7 @@ contract Iofy is Ownable {
     uint256 private _fee; // 100 = 1%
     uint256 private _totalraisedInDeals;
     uint256 private _availableFees;
+    uint256[] private _deviceIds;
 
     // Mappings
     mapping(uint256 => IoTDevice) private _ioTDeviceIdToIoTDevice;
@@ -146,6 +147,7 @@ contract Iofy is Ownable {
         );
 
         _ioTDeviceIdToIoTDevice[iotDeviceId] = iot;
+        _deviceIds.push(iotDeviceId);
         _ioTDeviceOwners[msg.sender].ioTDeviceIds.push(iotDeviceId);
 
         emit CreateIotDevice(msg.sender, iotDeviceId, costPerHour, cid);
@@ -292,6 +294,10 @@ contract Iofy is Ownable {
         returns (Order memory)
     {
         return _orderIdToOrder[orderId];
+    }
+
+    function getDeviceIds() external view returns (uint256[] memory ids) {
+        return _deviceIds;
     }
 
     // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++ //

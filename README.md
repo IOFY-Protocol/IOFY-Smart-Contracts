@@ -186,6 +186,16 @@ where,
 | endTimestamp   | the epoch timestamp when the user's time will be deactivated by the IoT device |
 | user           | the wallet address of the user who created this order.                         |
 
+```
+function getDeviceIds() external view returns (uint256[] memory ids);
+```
+
+where,
+
+| Syntax | description                                         |
+| ------ | --------------------------------------------------- |
+| ids    | an array of created device IDs in order of creation |
+
 ### Write Methods
 
 Here, we will split the _write_ methods in 3 categories: Admin, Lender, Renter
@@ -342,6 +352,6 @@ FVM address: t410frliqubiytswhml6hjn5t6px7wg7pxd5je6osqgy
 
 ### Iofy Contract Address:
 
-Ethereum address: 0x954630ac0260B7BE506bD3D42517Ce7c21DDdb29
+Ethereum address: 0xF94c74dbD81c8Bd4DB7AF4034e93BcA310ce2FCC
 
-FVM address: t410fsvddblacmc334udl2pkckf6opqq53wzjkfxvvma
+FVM address: t410f7fghjw6ydsf5jw326qbu5e54umim4l6mwrmlnvi

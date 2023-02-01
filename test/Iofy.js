@@ -72,6 +72,14 @@ describe("Iofy", () => {
       expect(info[2].length).to.be.equal(2);
       expect(info[2][0]).to.be.equal(1);
       expect(info[2][1]).to.be.equal(3);
+
+      info = await iofy.getDeviceIds();
+
+      expect(info.length).to.be.equal(4);
+      expect(info[0]).to.be.equal(1);
+      expect(info[1]).to.be.equal(2);
+      expect(info[2]).to.be.equal(3);
+      expect(info[3]).to.be.equal(4);
     });
 
     it("Should properly modify IoT devices", async () => {

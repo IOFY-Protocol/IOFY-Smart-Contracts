@@ -1,6 +1,10 @@
-# IOFY-Smart-Contracts
+# IOFY Protocol
 
-This repository contains IOFY smart contract
+## Associated Repository Links:
+
+- [Client Repository](https://github.com/IOFY-Protocol/client): This repository contains the client functionalities.
+- [Server Repository](https://github.com/IOFY-Protocol/server): This repository contains the server functionalities.
+- [IoT Device Repository](https://github.com/IOFY-Protocol/IOT-device): This repository contains the IoT device functionalities.
 
 ## INSTALLATION
 
@@ -34,7 +38,7 @@ npx hardhat test
 npx hardhat coverage
 ```
 
-## INTEGRATION DOCS
+## SMART CONTRACT INTEGRATION DOCS
 
 This section contains details of the different endpoints available in the smart contract.
 
